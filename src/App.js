@@ -2,19 +2,14 @@ import React from 'react'
 import { Route, Link } from 'react-router-dom'
 import * as BooksAPI from './BooksAPI'
 import './App.css'
-import Search from './Search'
+import BookSearch from './BookSearch'
 
 class BooksApp extends React.Component {
   render() {
     return (
       <div className="app">
         <Route path="/search" render={props => (
-          <Search 
-            className="search-books" 
-            barClassName="search-books-bar"
-            barPlaceholder="Search by title or author"
-            closeClassName="close-search"
-          />
+          <BookSearch />
         )} />
       <Route exact path="/" render={props => (
           <div className="list-books">

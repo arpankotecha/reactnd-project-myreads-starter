@@ -14,7 +14,10 @@ const SearchBar = (props) => {
           However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
           you don't find a specific author or title. Every search is limited by search terms.
         */}
-        <InputText placeholder={props.placeholder} />
+        <InputText 
+          placeholder={props.placeholder} 
+          handleChange={props.handleChange} 
+        />
     </div>
   )
 }
