@@ -6,7 +6,9 @@ const BookTop = (props) => {
   return (
     <div className="book-top">
       <BookCover backgroundImage={props.backgroundImage} />
-      <BookShelfChanger />
+      <BookShelfChanger 
+        shelf={props.shelf} 
+        handleChange={props.handleChange}/>
     </div>
   )
 }

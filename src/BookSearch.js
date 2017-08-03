@@ -1,6 +1,6 @@
 import React from 'react'
 import Search from './Search'
-import BookCover from './BookCover'
+import Book from './Book'
 import * as BooksAPI from './BooksAPI'
 
 class BookSearch extends React.Component {
@@ -22,12 +22,10 @@ class BookSearch extends React.Component {
   render(){
     var books = []
     for (let book of this.state.books) {
-      let url = `url(${book.imageLinks.smallThumbnail})`
       books.push(
-        <BookCover 
-          backgroundImage={url}
+        <Book 
+          book={book}
           key={book.id}
-          id={book.id}
         />
       )}
     return (
