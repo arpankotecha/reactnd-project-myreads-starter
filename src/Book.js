@@ -14,7 +14,7 @@ class Book extends React.Component{
           {this.props.book.title}
         </div>
         <div className="book-authors">
-          {this.props.book.authors.reduce((a,b)=>(`${a}\n${b}`))}
+          {this.props.book.authors && this.props.book.authors.reduce((a,b)=>(`${a}\n${b}`))}
         </div>
       </div>
     )

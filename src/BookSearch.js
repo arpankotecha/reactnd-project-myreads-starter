@@ -1,6 +1,6 @@
 import React from 'react'
 import Search from './Search'
-import Book from './Book'
+import Bookshelf from './Bookshelf'
 import * as BooksAPI from './BooksAPI'
 
 class BookSearch extends React.Component {
@@ -10,24 +10,22 @@ class BookSearch extends React.Component {
   }
   
   updateQuery(query){
-    BooksAPI.search(query)
-      .then(res => {
-        this.setState({
-          query: query,
-          books: res
-        })
-      })
+    if (!query){
+      this.setState({query: '', books:[]})
+    } else {
+      BooksAPI.search(query)
+        .then(res => {
+          if (res.error){
+            this.setState({books: []})
+          } else {
+          this.setState({
+            query: query,
+            books: res
+          })}
+    })}
   }
 
   render(){
-    var books = []
-    for (let book of this.state.books) {
-      books.push(
-        <Book 
-          book={book}
-          key={book.id}
-        />
-      )}
     return (
       <div>
       <Search 
@@ -37,9 +35,11 @@ class BookSearch extends React.Component {
         closeClassName="close-search"
         handleChange={q => this.updateQuery(q)}
       />
-      {books}
-      {console.log(this.state.books)}
-      <p>{this.state.query}</p>
+      <Bookshelf
+        title="Add New Book"
+        books={this.state.books}
+        updateBook={this.props.updateBook}
+      />
       </div>
     )
   }

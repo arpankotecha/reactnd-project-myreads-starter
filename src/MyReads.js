@@ -1,35 +1,10 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
 import Bookshelf from './Bookshelf'
-import * as BooksAPI from './BooksAPI'
 
 class MyReads extends React.Component{
-  state = {
-    books:[],
-  }
-
-  componentDidMount() {
-    BooksAPI.getAll()
-      .then(res=>{
-        this.setState({
-          books:res,
-        })
-      })
-  }
-
   booksInShelf(shelf) {
-      return this.state.books.filter((b)=>(b.shelf === shelf))
-  }
-
-  updateBook(bookId, shelf) {
-    BooksAPI.update({id:bookId}, shelf)
-      .then(res=>{
-        let books = this.state.books
-        let b = books.filter((b)=>b.id === bookId)[0]
-        b.shelf = shelf
-        this.setState({
-          books: books
-      })})
+      return this.props.books.filter((b)=>(b.shelf === shelf))
   }
 
   render(){
@@ -43,15 +18,18 @@ class MyReads extends React.Component{
       <Bookshelf 
         title="Currently Reading" 
         books={this.booksInShelf('currentlyReading')} 
-        updateBook={(bookID, shelf)=>this.updateBook(bookID, shelf)} />
+        updateBook={this.props.updateBook}
+      />
       <Bookshelf 
         title="Want to Read" 
         books={this.booksInShelf('wantToRead')}
-        updateBook={(bookID, shelf)=>this.updateBook(bookID, shelf)} />
+        updateBook={this.props.updateBook}
+      />
       <Bookshelf 
         title="Read" 
         books={this.booksInShelf('read')}
-        updateBook={(bookID, shelf)=>this.updateBook(bookID, shelf)} />
+        updateBook={this.props.updateBook}
+      />
       <div className="open-search">
         <Link to="/search" className="open-search">Add a book</Link>
       </div>
