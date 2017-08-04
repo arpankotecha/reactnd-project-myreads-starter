@@ -5,10 +5,13 @@ class Bookshelf extends React.Component {
   render(){
     let books = []
     for (let b of this.props.books) {
+      if (! b) continue
       books.push(
         <li key={b.id}>
           <Book 
+            key={b.id}
             book={b}
+            updateBook={this.props.updateBook}
           />
         </li>
       )
