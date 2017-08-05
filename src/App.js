@@ -32,21 +32,31 @@ class BooksApp extends React.Component {
       let bookIdToShelf = this.state.bookIdToShelf
       let oldShelf=bookIdToShelf[bookId]
       let books = this.state.books
+      let searchResults = this.state.searchResults
+      let sb = searchResults.filter((b)=>b.id === bookId)[0]
+      sb.shelf = shelf
       
       console.log("oldShelf", oldShelf, "newShelf", shelf)
       bookIdToShelf[bookId] = shelf
       if (oldShelf){
         let b = books.filter((b)=>b.id === bookId)[0]
         b.shelf = shelf
-        this.setState({books:books, bookIdToShelf:bookIdToShelf})
+        this.setState({
+          books:books, 
+          bookIdToShelf:bookIdToShelf,
+          searchResults: searchResults
+        })
       }
       else
       {
-
-      BooksAPI.get(bookId)
-        .then(b=>{
-          books.push(b)
-          this.setState({books:books, bookIdToShelf:bookIdToShelf})
+        BooksAPI.get(bookId)
+          .then(b=>{
+            books.push(b)
+            this.setState({
+              books:books, 
+              bookIdToShelf:bookIdToShelf,
+              searchResults:searchResults
+            })
      })}})
   }
 
@@ -56,15 +66,21 @@ class BooksApp extends React.Component {
         let books = this.state.books
         let b = books.filter((b)=>b.id === bookId)[0]
         let bookIdToShelf = this.state.bookIdToShelf
+        let searchResults = this.state.searchResults
+        let sb = searchResults.filter((b)=>b.id === bookId)[0]
+        sb.shelf = shelf
+      
         bookIdToShelf[bookId] = shelf
         b.shelf = shelf
         this.setState({
           books: books,
-          bookIdToShelf: bookIdToShelf
+          bookIdToShelf: bookIdToShelf,
+          searchResults: searchResults
       })})
   }
 
   searchBooks(query){
+    console.log("Query:", query)
     if (!query){
       this.setState({searchResults:[]})
     } 

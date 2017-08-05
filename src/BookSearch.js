@@ -4,6 +4,10 @@ import Bookshelf from './Bookshelf'
 import * as BooksAPI from './BooksAPI'
 
 class BookSearch extends React.Component {
+  componentWillUnmount(){
+    this.props.updateQuery("")
+  }
+
   render(){
     return (
       <div>

@@ -18,6 +18,7 @@ class InputText extends React.Component {
         onChange={event => this.onChange(event.target.value)}
         value={this.state.value}
       />
+      {this.state.value}
     </div>
     )}
 }
