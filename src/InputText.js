@@ -1,23 +1,24 @@
 import React from 'react'
 
 class InputText extends React.Component {
-  state= {
-    value: ""
+  state = {
+    value:''
   }
 
-  updateText(text){
-    this.setState({
-      value:text}, 
-      () => this.props.handleChange(this.state.value))
+  onChange(value){
+    this.setState({value:value})
+    this.props.handleChange(value)
   }
 
   render() {
     return (
+      <div>
       <input type="text" 
         placeholder={this.props.placeholder} 
-        onChange={event => this.updateText(event.target.value)}
+        onChange={event => this.onChange(event.target.value)}
         value={this.state.value}
       />
+    </div>
     )}
 }
 

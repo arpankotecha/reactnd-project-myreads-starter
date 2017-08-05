@@ -3,19 +3,15 @@ import Book from './Book'
 
 class Bookshelf extends React.Component {
   render(){
-    let books = []
-    for (let b of this.props.books) {
-      if (! b) continue
-      books.push(
-        <li key={b.id}>
-          <Book 
-            key={b.id}
-            book={b}
-            updateBook={this.props.updateBook}
-          />
-        </li>
-      )
-    }
+    let books = this.props.books.map((b)=>(
+      <li key={b.id}>
+        <Book 
+          key={b.id} 
+          book={b} 
+          updateBook={this.props.updateBook}
+        />
+      </li>
+    ))
     return (
       <div className="bookshelf">
         <h2 className="bookshelf-title">{this.props.title}</h2>

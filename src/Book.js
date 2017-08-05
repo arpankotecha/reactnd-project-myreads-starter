@@ -6,7 +6,7 @@ class Book extends React.Component{
     return (
       <div className="book">
         <BookTop 
-          backgroundImage={`url(${this.props.book.imageLinks.smallThumbnail})`}
+          backgroundImage={this.props.book.imageLinks && `url(${this.props.book.imageLinks.smallThumbnail})`}
           shelf={this.props.book.shelf} 
           handleChange={(shelf)=>this.props.updateBook(this.props.book.id, shelf)}
           />
