@@ -1,7 +1,6 @@
 import React from 'react'
 import Search from './Search'
 import Bookshelf from './Bookshelf'
-import * as BooksAPI from './BooksAPI'
 
 class BookSearch extends React.Component {
   componentWillUnmount(){

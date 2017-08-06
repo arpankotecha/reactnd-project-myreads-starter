@@ -68,7 +68,7 @@ class BooksApp extends React.Component {
         let bookIdToShelf = this.state.bookIdToShelf
         let searchResults = this.state.searchResults
         let sb = searchResults.filter((b)=>b.id === bookId)[0]
-        sb.shelf = shelf
+        if (sb) sb.shelf = shelf
       
         bookIdToShelf[bookId] = shelf
         b.shelf = shelf
@@ -80,7 +80,6 @@ class BooksApp extends React.Component {
   }
 
   searchBooks(query){
-    console.log("Query:", query)
     if (!query){
       this.setState({searchResults:[]})
     } 
