@@ -27,46 +27,38 @@ class BooksApp extends React.Component {
       })
   }
 
-  addBook(book, newShelf) {
-    BooksAPI.update(book, newShelf)
-    .then(res=>{
-      this.setState((prev) => {
-        let oldShelf = prev.bookIdToShelf[book.id]
-        let sb = prev.searchResults.filter((b)=>b.id === book.id)[0]
-        sb.shelf = newShelf
-        prev.bookIdToShelf[book.id] = newShelf
-        if (oldShelf){
-          let b = prev.books.filter((b)=>b.id === book.id)[0]
-          b.shelf = newShelf
-        }
-        else{
-          prev.books.push(book)
-        }
-        return {
-          books:prev.books,
-          bookIdToShelf: prev.bookIdToShelf,
-          searchResults: prev.searchResults
-        }
-      })
-     })
+  updateArray(bookArray, book, newShelf){
+    return bookArray.map((b)=>{
+      if (b.id === book.id)
+        b.shelf = newShelf
+      return b
+    })
+  }
+
+  updateShelf(book, newShelf){
+    this.setState((prev)=> {
+      prev.bookIdToShelf[book.id] = newShelf
+
+      return {
+        books: this.updateArray(prev.books, book, newShelf),
+        bookIdToShelf: prev.bookIdToShelf,
+        searchResults: this.updateArray(prev.searchResults, book, newShelf)
+      }
+    })
   }
 
   updateBook(book, newShelf) {
     BooksAPI.update(book, newShelf)
-      .then(res=>{
-        this.setState((prev) => {
-          let b = prev.books.filter((b)=>b.id === book.id)[0]
-          b.shelf = newShelf
-          let sb = prev.searchResults.filter((b)=>b.id === book.id)[0]
-          if (sb) sb.shelf = newShelf
-      
-          prev.bookIdToShelf[book.id] = newShelf
-        return {
-          books: prev.books,
-          bookIdToShelf: prev.bookIdToShelf,
-          searchResults: prev.searchResults
-      }})
-  })}
+    .then(res=>{
+      if( ! this.state.bookIdToShelf[book.id] ){
+        this.setState((prev)=>{
+          prev.books.push(book)
+          return {books:prev.books}
+        })
+      }
+      this.updateShelf(book, newShelf)
+     })
+  }
 
   searchBooks(query){
     if (!query){
@@ -79,7 +71,6 @@ class BooksApp extends React.Component {
             this.setState({
               searchResults: []
             })
-            console.log("BooksAPI returned error:", res.error)
           } 
           else {
             res = res.map((b)=>{
@@ -98,7 +89,7 @@ class BooksApp extends React.Component {
       <div className="app">
         <Route path="/search" render={props => (
           <BookSearch 
-            updateBook={(bookID, shelf)=>this.addBook(bookID, shelf)} 
+            updateBook={(bookID, shelf)=>this.updateBook(bookID, shelf)} 
             updateQuery={(query)=>this.searchBooks(query)}
             books={this.state.searchResults}
           />
