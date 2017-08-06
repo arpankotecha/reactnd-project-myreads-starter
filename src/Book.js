@@ -8,7 +8,7 @@ class Book extends React.Component{
         <BookTop 
           backgroundImage={this.props.book.imageLinks && `url(${this.props.book.imageLinks.smallThumbnail})`}
           shelf={this.props.book.shelf} 
-          handleChange={(shelf)=>this.props.updateBook(this.props.book.id, shelf)}
+          handleChange={(newShelf)=>this.props.updateBook(this.props.book, newShelf)}
           />
         <div className="book-title">
           {this.props.book.title}

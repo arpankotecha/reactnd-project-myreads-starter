@@ -15,10 +15,11 @@ class BooksApp extends React.Component {
   componentDidMount() {
     BooksAPI.getAll()
       .then(res=>{
-        let bookIdToShelf = {}
-        for (let b of res){
-          bookIdToShelf[b.id] = b.shelf
-        }
+        let bookIdToShelf = res.reduce(
+          (object, book) => {
+            object[book.id] = book.shelf
+            return object
+          }, {})
         this.setState({
           books:res,
           bookIdToShelf:bookIdToShelf
@@ -26,58 +27,46 @@ class BooksApp extends React.Component {
       })
   }
 
-  addBook(bookId, shelf) {
-    BooksAPI.update({id:bookId}, shelf)
+  addBook(book, newShelf) {
+    BooksAPI.update(book, newShelf)
     .then(res=>{
-      let bookIdToShelf = this.state.bookIdToShelf
-      let oldShelf=bookIdToShelf[bookId]
-      let books = this.state.books
-      let searchResults = this.state.searchResults
-      let sb = searchResults.filter((b)=>b.id === bookId)[0]
-      sb.shelf = shelf
-      
-      console.log("oldShelf", oldShelf, "newShelf", shelf)
-      bookIdToShelf[bookId] = shelf
-      if (oldShelf){
-        let b = books.filter((b)=>b.id === bookId)[0]
-        b.shelf = shelf
-        this.setState({
-          books:books, 
-          bookIdToShelf:bookIdToShelf,
-          searchResults: searchResults
-        })
-      }
-      else
-      {
-        BooksAPI.get(bookId)
-          .then(b=>{
-            books.push(b)
-            this.setState({
-              books:books, 
-              bookIdToShelf:bookIdToShelf,
-              searchResults:searchResults
-            })
-     })}})
+      this.setState((prev) => {
+        let oldShelf = prev.bookIdToShelf[book.id]
+        let sb = prev.searchResults.filter((b)=>b.id === book.id)[0]
+        sb.shelf = newShelf
+        prev.bookIdToShelf[book.id] = newShelf
+        if (oldShelf){
+          let b = prev.books.filter((b)=>b.id === book.id)[0]
+          b.shelf = newShelf
+        }
+        else{
+          prev.books.push(book)
+        }
+        return {
+          books:prev.books,
+          bookIdToShelf: prev.bookIdToShelf,
+          searchResults: prev.searchResults
+        }
+      })
+     })
   }
 
-  updateBook(bookId, shelf) {
-    BooksAPI.update({id:bookId}, shelf)
+  updateBook(book, newShelf) {
+    BooksAPI.update(book, newShelf)
       .then(res=>{
-        let books = this.state.books
-        let b = books.filter((b)=>b.id === bookId)[0]
-        let bookIdToShelf = this.state.bookIdToShelf
-        let searchResults = this.state.searchResults
-        let sb = searchResults.filter((b)=>b.id === bookId)[0]
-        if (sb) sb.shelf = shelf
+        this.setState((prev) => {
+          let b = prev.books.filter((b)=>b.id === book.id)[0]
+          b.shelf = newShelf
+          let sb = prev.searchResults.filter((b)=>b.id === book.id)[0]
+          if (sb) sb.shelf = newShelf
       
-        bookIdToShelf[bookId] = shelf
-        b.shelf = shelf
-        this.setState({
-          books: books,
-          bookIdToShelf: bookIdToShelf,
-          searchResults: searchResults
-      })})
-  }
+          prev.bookIdToShelf[book.id] = newShelf
+        return {
+          books: prev.books,
+          bookIdToShelf: prev.bookIdToShelf,
+          searchResults: prev.searchResults
+      }})
+  })}
 
   searchBooks(query){
     if (!query){
