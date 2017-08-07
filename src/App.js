@@ -60,6 +60,37 @@ class BooksApp extends React.Component {
      })
   }
 
+  removeDuplicates(books) {
+    let bookIds = books.map((b)=>b.id)
+    return (books.filter(
+      (b, i, a)=>(bookIds.indexOf(b.id) === i)))
+  }
+
+  handleSearchError(res){
+    this.setState({
+      searchResults: []
+    })
+  }
+
+  handleSearchSuccess(res){
+    res = res.map((b)=>{
+      let shelf = this.state.bookIdToShelf[b.id]
+      b.shelf=shelf ? shelf : "none"
+      return b
+    })
+    res = this.removeDuplicates(res)
+    this.setState({
+      searchResults: res
+  })}
+
+  handleSearchResults(res) {
+    if (res.error){
+      this.handleSearchError(res)
+    } 
+    else {
+      this.handleSearchSuccess(res)
+  }}
+
   searchBooks(query){
     if (!query){
       this.setState({searchResults:[]})
@@ -67,20 +98,7 @@ class BooksApp extends React.Component {
     else {
       BooksAPI.search(query)
         .then(res => {
-          if (res.error){
-            this.setState({
-              searchResults: []
-            })
-          } 
-          else {
-            res = res.map((b)=>{
-              let shelf = this.state.bookIdToShelf[b.id]
-              b.shelf=shelf ? shelf : "none"
-              return b
-            })
-            this.setState({
-              searchResults: res
-          })}
+          this.handleSearchResults(res)
     })}
   }
 

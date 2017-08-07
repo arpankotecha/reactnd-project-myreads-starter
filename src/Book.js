@@ -1,24 +1,20 @@
 import React from 'react'
 import BookTop from './BookTop'
 
-class Book extends React.Component{
-  render() {
-    return (
+const Book = (props) => (
       <div className="book">
         <BookTop 
-          backgroundImage={this.props.book.imageLinks && `url(${this.props.book.imageLinks.smallThumbnail})`}
-          shelf={this.props.book.shelf} 
-          handleChange={(newShelf)=>this.props.updateBook(this.props.book, newShelf)}
+          backgroundImage={props.book.imageLinks && `url(${props.book.imageLinks.smallThumbnail})`}
+          shelf={props.book.shelf} 
+          handleChange={(newShelf)=>props.updateBook(props.book, newShelf)}
           />
         <div className="book-title">
-          {this.props.book.title}
+          {props.book.title}
         </div>
         <div className="book-authors">
-          {this.props.book.authors && this.props.book.authors.reduce((a,b)=>(`${a}\n${b}`))}
+          {props.book.authors && props.book.authors.reduce((a,b)=>(`${a}\n${b}`))}
         </div>
       </div>
-    )
-  }
-}
+)
 
 export default Book
