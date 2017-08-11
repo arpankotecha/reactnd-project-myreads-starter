@@ -5,7 +5,7 @@ Happy reading.
 ## Install
 ```
 git clone https://github.com/arpankotecha/reactnd-project-myreads-starter.git
-cd reactnd-project-myreads-starter.git
+cd reactnd-project-myreads-starter
 npm start
 ```
 
