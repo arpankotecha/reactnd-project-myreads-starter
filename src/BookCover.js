@@ -5,9 +5,7 @@ const BookCover = (props) => {
     <div 
       className="book-cover" 
       style={{ 
-        width: 128, 
-        height: 188,
-        backgroundImage: props.backgroundImage
+        backgroundImage: props.backgroundImage,
       }}>
     </div>
   )

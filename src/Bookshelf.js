@@ -1,11 +1,13 @@
 import React from 'react'
+import keyIndex from 'react-key-index'
 import Book from './Book'
 
 const Bookshelf = (props) => {
-  let books = props.books.map( (b)=>(
-        <li key={b.id}>
+  let booksWithId = keyIndex(props.books, 1)
+  let books = booksWithId.map( (b)=>(
+        <li key={b._titleId}>
           <Book 
-            key={b.id} 
+            key={b._titleId} 
             book={b} 
             updateBook={props.updateBook}
           />
